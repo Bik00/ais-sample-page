@@ -14,6 +14,19 @@
     <script src="../js/gallary.js"></script>
 </head>
 <body>
+
+    <!-- Loading Modal -->
+    <div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center">
+                <div class="modal-body">
+                    <img src="../assets/icons/loading.gif" alt="Loading" style="width: 100%; max-width: 100px;">
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg header">
         <div class="container-fluid">
@@ -37,7 +50,7 @@
                 <div class="col-md-6">
                     <p>Target Image upload</p>
                     <div class="image-upload-area text-center border p-4">
-                        <img src="../assets/icons/image-upload.png" width="100" alt="Upload Icon" class="mb-3">
+                        <img src="../assets/icons/image-upload.png" width="50" alt="Upload Icon" class="mb-3">
                         <p><b>Upload file here</b></p>
                         <input type="file" class="form-control">
                     </div>
@@ -45,15 +58,21 @@
                 <div class="col-md-6">
                     <p>Theme Image upload</p>
                     <div class="image-upload-area text-center border p-4">
-                        <img src="../assets/icons/image-upload.png" width="100" alt="Upload Icon" class="mb-3">
+                        <img src="../assets/icons/image-upload.png" width="50" alt="Upload Icon" class="mb-3">
                         <p><b>Upload file here</b></p>
                         <input type="file" class="form-control">
                     </div>
-                    <!--
-                    <div class="description-area border p-4">
-                        <textarea class="form-control" rows="8" placeholder="Description"></textarea>
+                    <button id="generate" class="btn btn-success generate">분석하기</button>
+                    <div class="description-area row border p-4">
+                        <div class="col-md-6">
+                            <p>positive prompts</p>
+                            <textarea class="form-control" rows="8" placeholder="Enter positive prompts here"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <p>negative prompts</p>
+                            <textarea class="form-control" rows="8" placeholder="Enter negative prompts here"></textarea>
+                        </div>
                     </div>
-                    -->
                     <div class="d-flex justify-content-between mt-3">
                         <button class="btn btn-secondary">Cancel</button>
                         <button class="btn btn-primary">Next</button>

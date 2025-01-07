@@ -30,3 +30,46 @@ footer {
     bottom: 0;
     width: 100%;
 }
+
+.generate {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%; /* 부모 요소 크기에 맞게 설정 */
+    max-width: 200px; /* 버튼의 최대 너비 */
+}
+
+/* Loading GIF */
+#loading-container img {
+    width: 100%;
+    height: auto;
+}
+
+.description-area {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    opacity: 0; /* 처음에는 투명하게 설정 */
+    transform: translateY(20px); /* 아래로 약간 이동 */
+    transition: opacity 0.5s ease, transform 0.5s ease; /* 서서히 나타나는 효과 */
+    position: relative; /* 스크롤 이동에 적합한 위치 설정 */
+    z-index: auto;      /* 기본 z-index 유지 */
+}
+
+.description-area.visible {
+    opacity: 1; /* 완전히 보이도록 설정 */
+    transform: translateY(0); /* 제자리로 이동 */
+}
+
+.description-area p {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+textarea.form-control {
+    resize: none; /* 텍스트박스 크기 조절 비활성화 */
+}
