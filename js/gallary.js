@@ -38,14 +38,16 @@ $(document).ready(function () {
     // "분석하기" 버튼 클릭 시 로딩 모달 표시 예시
     $('#generate').on('click', function () {
         showLoading();
-
         // 모의 API 호출 후 로딩 모달 숨기기
         setTimeout(function () {
             hideLoading();
+            $(".content").css("overflow-y", "auto");
             $(".description-area").css('display', 'flex');
             $('.description-area').addClass('visible');
 
-            $(window).scrollTop(0);
+            $('.content').animate({
+                scrollTop: $('.description-area').offset().top
+            }, 800); // 800ms 동안 애니메이션
         }, 3000); // 3초 후 숨김
     });
 });
