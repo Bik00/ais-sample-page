@@ -1,0 +1,49 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+
+nav {
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+footer {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.generated-image img {
+    background-color: yellow; /* 샘플 이미지 대신 */
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid #ddd;
+}
+
+.product-info {
+    padding-top: 10px;
+}
+
+.product-item {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
