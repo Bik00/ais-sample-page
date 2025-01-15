@@ -6,9 +6,20 @@ $(document).ready(function() {
         $("#productModalLabel").text("선택된 항목");
         $("#modal-explain-area").text(`현재 선택된 항목은 "${value}"입니다.`);
 
-        $(".slideshow-row img").each(function (index) {
+        // data-category 속성 값 읽기
+        const category = $(this).data("category");
+
+        // 슬라이드쇼 이미지 업데이트
+        $(".mySlides img").each(function (index) {
+            const newSrc = `../assets/images/${category}_${index + 1}.webp`;
+            $(this).attr("src", newSrc);
+        });
+
+        // 썸네일 이미지 업데이트
+        $(".slideshow-row .slideshow-column img").each(function (index) {
             let caption_text = `${value} ${index + 1}번 사진`;
-            $(this).attr("alt", caption_text);
+            const newSrc = `../assets/images/${category}_${index + 1}.webp`;
+            $(this).attr("src", newSrc).attr("alt", caption_text);
         });
 
         showSlides(1);
