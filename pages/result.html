@@ -15,6 +15,18 @@
     </head>
     <body>
 
+        <!-- Loading Modal -->
+        <div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center">
+                    <div class="modal-body">
+                        <img src="../assets/icons/loading.gif" alt="Loading" style="width: 100%; max-width: 100px;">
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Navigation Bar -->
         <nav class="navbar navbar-expand-lg header">
             <div class="container-fluid">
@@ -41,7 +53,9 @@
                         <div class="generated-image text-center">
                             <img src="../assets/images/generated_images.webp" alt="Generated Image" class="img-fluid">
                         </div>
-                        <button class="btn btn-primary mt-3 d-block mx-auto">수정하기</button>
+                        <div class="action-buttons text-center mt-3">
+                            <button class="btn btn-primary mt-3 d-block mx-auto" id="modify">수정하기</button>
+                        </div>
                     </div>
 
                     <div class="col-md-4">

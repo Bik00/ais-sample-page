@@ -28,6 +28,62 @@ $(document).ready(function() {
 
         showSlides(1);
     });
+
+    $(document).on("click", "#modify", function () {
+        // 현재 버튼 숨기기
+        $(this).parent().text("");
+
+        // "취소"와 "적용하기" 버튼 추가
+        $(".action-buttons").append(`
+                <button class="btn btn-secondary cancel-btn me-2" id="cancel">취소</button>
+                <button class="btn btn-success apply-btn" id="apply">적용하기</button>
+        `);
+    });
+
+    // 취소 버튼 클릭 이벤트
+    $(document).on("click", "#cancel", function () {
+        $(this).parent().text("");
+
+        // "취소"와 "적용하기" 버튼 추가
+        $(".action-buttons").append(`
+                <button class="btn btn-primary mt-3 d-block mx-auto" id="modify">수정하기</button>
+        `);
+    });
+
+    // 적용하기 버튼 클릭 이벤트
+    $(document).on("click", "#apply", function () {
+        showLoading();
+        setTimeout(function () {
+
+            let newSrc;
+            const currentSrc = $(".generated-image img").attr("src");
+
+            $(".action-buttons").text("");
+
+            // "취소"와 "적용하기" 버튼 추가
+            $(".action-buttons").append(`
+                    <button class="btn btn-primary mt-3 d-block mx-auto" id="modify">수정하기</button>
+            `);
+
+            // 랜덤 숫자 생성 (1부터 9 사이)
+            const randomNumber = Math.floor(Math.random() * 9) + 1;
+
+            // 새로운 src 경로 생성
+            do {
+                const randomNumber = Math.floor(Math.random() * 9) + 1;
+                newSrc = `../assets/images/${randomNumber}.webp`;
+            } while (newSrc === currentSrc);
+
+            // 이미지 태그의 src 속성 업데이트
+            $(".generated-image img").attr("src", newSrc);
+
+            // 로딩 모달 숨기기
+            $("#loadingModal").modal("hide");
+
+            hideLoading();
+        }, 3000); // 3초 후 숨김
+    });
+
 });
 
 function plusSlides(n) {
@@ -55,3 +111,13 @@ function plusSlides(n) {
     dots[slideIndex-1].className += " active";
     captionText.innerHTML = dots[slideIndex-1].alt;
   }
+
+// 로딩 모달 표시
+function showLoading() {
+    $('#loadingModal').modal('show');
+}
+
+// 로딩 모달 숨기기
+function hideLoading() {
+    $('#loadingModal').modal('hide');
+}
