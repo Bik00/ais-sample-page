@@ -71,9 +71,8 @@
                             <div class="product-item border p-2 mb-2">
                                 <p class="d-inline-block me-2">카테고리: 건축</p><br>
                                 <p class="d-inline-block me-2">이름:</p>
-                                <input type="button" class="btn btn-outline-secondary d-inline-block me-2" value="벽지" data-bs-toggle="modal" data-bs-target="#productModal" /><br>
-                                <p class="d-inline-block me-2">색상:</p>
-                                <input type="button" class="btn btn-outline-secondary d-inline-block" value="흰색" data-bs-toggle="modal" data-bs-target="#productModal" />
+                                <input type="button" class="btn btn-outline-secondary d-inline-block me-2" value="벽지" data-bs-toggle="modal" data-bs-target="#productModal" onclick="showSlides(1);" /><br>
+                                <p class="d-inline-block me-2">색상: 흰색</p>
                             </div>
                             <div class="product-item border p-2 mb-2">
                                 <p class="d-inline-block me-2">카테고리: 가구</p><br>
@@ -105,7 +104,68 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        여기에 제품 상세 정보를 표시합니다.
+                        <p id="modal-explain-area">여기에 제품 상세 정보를 표시합니다.</p>
+
+                        <div class="slideshow-container">
+                            <div class="mySlides">
+                              <div class="numbertext">1 / 6</div>
+                              <img src="../assets/images/wallpaper_1.webp" style="width:100%">
+                            </div>
+                          
+                            <div class="mySlides">
+                              <div class="numbertext">2 / 6</div>
+                              <img src="../assets/images/wallpaper_2.webp" style="width:100%">
+                            </div>
+                          
+                            <div class="mySlides">
+                              <div class="numbertext">3 / 6</div>
+                              <img src="../assets/images/wallpaper_3.webp" style="width:100%">
+                            </div>
+                              
+                            <div class="mySlides">
+                              <div class="numbertext">4 / 6</div>
+                              <img src="../assets/images/wallpaper_4.webp" style="width:100%">
+                            </div>
+
+                            <div class="mySlides">
+                                <div class="numbertext">5 / 6</div>
+                                <img src="../assets/images/wallpaper_5.webp" style="width:100%">
+                              </div>
+
+                              <div class="mySlides">
+                                <div class="numbertext">6 / 6</div>
+                                <img src="../assets/images/wallpaper_6.webp" style="width:100%">
+                              </div>
+                              
+                            <a class="prev" onclick="plusSlides(-1)">❮</a>
+                            <a class="next" onclick="plusSlides(1)">❯</a>
+                          
+                            <div class="caption-container">
+                              <p id="caption"></p>
+                            </div>
+                          
+                            <div class="slideshow-row">
+                              <div class="slideshow-column">
+                                <img class="demo cursor" src="../assets/images/wallpaper_1.webp" style="width:100%" onclick="currentSlide(1)" alt="벽지 1번 사진">
+                              </div>
+                              <div class="slideshow-column">
+                                <img class="demo cursor" src="../assets/images/wallpaper_2.webp" style="width:100%" onclick="currentSlide(2)" alt="벽지 2번 사진">
+                              </div>
+                              <div class="slideshow-column">
+                                <img class="demo cursor" src="../assets/images/wallpaper_3.webp" style="width:100%" onclick="currentSlide(3)" alt="벽지 3번 사진">
+                              </div>
+                              <div class="slideshow-column">
+                                <img class="demo cursor" src="../assets/images/wallpaper_4.webp" style="width:100%" onclick="currentSlide(4)" alt="벽지 4번 사진">
+                              </div>
+                              <div class="slideshow-column">
+                                <img class="demo cursor" src="../assets/images/wallpaper_5.webp" style="width:100%" onclick="currentSlide(5)" alt="벽지 5번 사진">
+                              </div>
+                              <div class="slideshow-column">
+                                <img class="demo cursor" src="../assets/images/wallpaper_6.webp" style="width:100%" onclick="currentSlide(6)" alt="벽지 6번 사진">
+                              </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
