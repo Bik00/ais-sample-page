@@ -106,6 +106,7 @@ button {
     object-fit: cover; /* 가로 비율을 유지하면서 초과 영역 잘림 */
     display: block;
     margin: 0 auto; /* 이미지 가운데 정렬 */
+    object-position: center;
 }
 
   /* Add a pointer when hovering over the thumbnail images */

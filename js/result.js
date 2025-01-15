@@ -13,6 +13,10 @@ $(document).ready(function() {
         $(".mySlides img").each(function (index) {
             const newSrc = `../assets/images/${category}_${index + 1}.webp`;
             $(this).attr("src", newSrc);
+            $(this).css({
+                "object-fit": "cover",
+                "object-position": category === "stand" ? "top" : "center"
+            });
         });
 
         // 썸네일 이미지 업데이트
