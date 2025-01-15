@@ -1,75 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ais sample page</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="../css/result.css">
-    <script src="../js/result.js"></script>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ais sample page</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="../css/result.css">
+        <script src="../js/result.js"></script>
+    </head>
+    <body>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg header">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../index.html">AIS sample page</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link active" href="../index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="./gallary.html">Gallery</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Content Section -->
-    <div class="content">
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col-md-8">
-                    <h5>Generated Image</h5>
-                    <div class="generated-image">
-                        <img src="path/to/your/image.jpg" alt="Generated Image" class="img-fluid">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <h5>적용 제품 정보</h5>
-                    <div class="product-info">
-                        <div class="product-item border p-2 mb-2">
-                            <p>카테고리: 건축</p>
-                            <p>이름: 벽지</p>
-                            <p>색상: 흰색</p>
-                        </div>
-                        <div class="product-item border p-2 mb-2">
-                            <p>카테고리: 가구</p>
-                            <p>이름: 책상</p>
-                        </div>
-                        <div class="product-item border p-2 mb-2">
-                            <p>카테고리: 조명</p>
-                            <p>이름: 스탠드</p>
-                        </div>
-                        <div class="product-item border p-2 mb-2">
-                            <p>카테고리: 장식</p>
-                        </div>
-                    </div>
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg header">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="../index.html">AIS sample page</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link active" href="../index.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="./gallary.html">Gallery</a></li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </div>
+        </nav>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3">
-        <p>Created by Your Name</p>
-        <p>Email: your.email@example.com</p>
-    </footer>
-</body>
+        <!-- Content Section -->
+        <div class="content">
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h5>Generated Image</h5>
+                        <div class="generated-image">
+                            <img src="../assets/images/generated_images.webp" alt="Generated Image" class="img-fluid">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>적용 제품 정보</h5>
+                        <div class="product-info">
+                            <div class="product-item border p-2 mb-2">
+                                <p>카테고리: 건축</p>
+                                <p>이름:</p><input type="text" class="inline" value="책상" />
+                                <p>색상:</p><input type="text" class="inline" value="흰색" />
+                            </div>
+                            <div class="product-item border p-2 mb-2">
+                                <p>카테고리: 가구</p>
+                                <p>이름: 책상</p>
+                            </div>
+                            <div class="product-item border p-2 mb-2">
+                                <p>카테고리: 조명</p>
+                                <p>이름: 스탠드</p>
+                            </div>
+                            <div class="product-item border p-2 mb-2">
+                                <p>카테고리: 장식</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-dark text-white text-center py-3">
+            <p>Created by Your Name</p>
+            <p>Email: your.email@example.com</p>
+        </footer>
+    </body>
 </html>

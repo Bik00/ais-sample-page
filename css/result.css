@@ -33,7 +33,7 @@ footer {
 
 .generated-image img {
     background-color: yellow; /* 샘플 이미지 대신 */
-    width: 100%;
+    width: 400px;
     height: auto;
     display: block;
     border: 1px solid #ddd;
@@ -46,4 +46,13 @@ footer {
 .product-item {
     background-color: #f8f9fa;
     border-radius: 5px;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.generated-image {
+    display : flex;
+    justify-content: center;
 }
