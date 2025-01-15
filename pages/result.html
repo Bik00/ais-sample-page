@@ -41,12 +41,12 @@
                         <div class="generated-image text-center">
                             <img src="../assets/images/generated_images.webp" alt="Generated Image" class="img-fluid">
                         </div>
-                        <button class="btn btn-primary mt-3 d-block mx-auto">재수정하기</button>
+                        <button class="btn btn-primary mt-3 d-block mx-auto">수정하기</button>
                     </div>
-                    
 
                     <div class="col-md-4">
                         <h5>적용 제품 정보</h5>
+                        <!--
                         <div class="product-info">
                             <div class="product-item border p-2 mb-2">
                                 <p class="d-inline-block me-2">카테고리: 건축</p><br>
@@ -66,6 +66,50 @@
                                 <p class="d-inline-block me-2">이름:</p><input type="text" class="d-inline-block me-2" value="오브제" /><br>
                             </div>
                         </div>
+                        -->
+                        <div class="product-info">
+                            <div class="product-item border p-2 mb-2">
+                                <p class="d-inline-block me-2">카테고리: 건축</p><br>
+                                <p class="d-inline-block me-2">이름:</p>
+                                <input type="button" class="btn btn-outline-secondary d-inline-block me-2" value="벽지" data-bs-toggle="modal" data-bs-target="#productModal" /><br>
+                                <p class="d-inline-block me-2">색상:</p>
+                                <input type="button" class="btn btn-outline-secondary d-inline-block" value="흰색" data-bs-toggle="modal" data-bs-target="#productModal" />
+                            </div>
+                            <div class="product-item border p-2 mb-2">
+                                <p class="d-inline-block me-2">카테고리: 가구</p><br>
+                                <p class="d-inline-block me-2">이름:</p>
+                                <input type="button" class="btn btn-outline-secondary d-inline-block me-2" value="책상" data-bs-toggle="modal" data-bs-target="#productModal" /><br>
+                            </div>
+                            <div class="product-item border p-2 mb-2">
+                                <p class="d-inline-block me-2">카테고리: 조명</p><br>
+                                <p class="d-inline-block me-2">이름:</p>
+                                <input type="button" class="btn btn-outline-secondary d-inline-block me-2" value="스탠드" data-bs-toggle="modal" data-bs-target="#productModal" /><br>
+                            </div>
+                            <div class="product-item border p-2 mb-2">
+                                <p class="d-inline-block me-2">카테고리: 장식</p><br>
+                                <p class="d-inline-block me-2">이름:</p>
+                                <input type="button" class="btn btn-outline-secondary d-inline-block me-2" value="오브제" data-bs-toggle="modal" data-bs-target="#productModal" /><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productModalLabel">제품 상세 정보</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        여기에 제품 상세 정보를 표시합니다.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-primary">저장</button>
                     </div>
                 </div>
             </div>

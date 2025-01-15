@@ -43,11 +43,6 @@ footer {
     padding-top: 10px;
 }
 
-.product-item {
-    background-color: #f8f9fa;
-    border-radius: 5px;
-}
-
 .inline {
     display: inline-block;
 }
@@ -60,4 +55,33 @@ footer {
 button {
     display: block;
     margin: 0 auto; /* 가운데 정렬 */
+}
+
+.btn-outline-primary {
+    color: #007bff;
+    background-color: #fff;
+    border-color: #007bff;
+}
+
+.btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-outline-secondary {
+    padding: 4px 10px; /* 세로와 가로 패딩 조정 */
+    font-size: 14px; /* 글씨 크기 조정 */
+    line-height: 1.2; /* 버튼 내부 텍스트 간격 조정 */
+    border-radius: 4px; /* 모서리 둥글기 */
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.product-item {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #bfbfbf !important; /* 선 두께와 색상 조정 */
 }
