@@ -100,6 +100,14 @@ button {
     display: none;
   }
   
+  .mySlides img {
+    width: 100%; /* 모달 영역의 가로 크기에 맞춤 */
+    height: 250px; /* 세로 크기를 300px로 제한 */
+    object-fit: cover; /* 가로 비율을 유지하면서 초과 영역 잘림 */
+    display: block;
+    margin: 0 auto; /* 이미지 가운데 정렬 */
+}
+
   /* Add a pointer when hovering over the thumbnail images */
   .cursor {
     cursor: pointer;

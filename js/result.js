@@ -5,6 +5,13 @@ $(document).ready(function() {
         const value = $(this).val();
         $("#productModalLabel").text("선택된 항목");
         $("#modal-explain-area").text(`현재 선택된 항목은 "${value}"입니다.`);
+
+        $(".slideshow-row img").each(function (index) {
+            let caption_text = `${value} ${index + 1}번 사진`;
+            $(this).attr("alt", caption_text);
+        });
+
+        showSlides(1);
     });
 });
 
