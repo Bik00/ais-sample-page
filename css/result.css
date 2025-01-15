@@ -53,6 +53,11 @@ footer {
 }
 
 .generated-image {
-    display : flex;
+    display: flex;
     justify-content: center;
+}
+
+button {
+    display: block;
+    margin: 0 auto; /* 가운데 정렬 */
 }
