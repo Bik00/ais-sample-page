@@ -1,4 +1,5 @@
 let slideIndex = 1;
+let originalInputs = [];
 
 $(document).ready(function() {
     $(document).on("click", "input[type='button']", function () {
@@ -30,6 +31,9 @@ $(document).ready(function() {
     });
 
     $(document).on("click", "#modify", function () {
+
+        originalInputs = [];
+
         // 현재 버튼 숨기기
         $(this).parent().text("");
 
@@ -38,6 +42,23 @@ $(document).ready(function() {
                 <button class="btn btn-secondary cancel-btn me-2" id="cancel">취소</button>
                 <button class="btn btn-success apply-btn" id="apply">적용하기</button>
         `);
+
+
+        $(".product-info input").each(function () {
+            originalInputs.push({
+                type: $(this).attr("type"),
+                value: $(this).val(),
+                category: $(this).data("category"),
+                datatoggle: $(this).data("bs-toggle")
+            });
+        });
+
+        // input 태그를 text로 변경
+        $(".product-info input").each(function () {
+            $(this).attr("type", "text").removeClass("btn btn-outline-secondary");
+            $(this).attr("data-bs-toggle", "none");
+        });
+
     });
 
     // 취소 버튼 클릭 이벤트
@@ -48,6 +69,15 @@ $(document).ready(function() {
         $(".action-buttons").append(`
                 <button class="btn btn-primary mt-3 d-block mx-auto" id="modify">수정하기</button>
         `);
+
+        $(".product-info input").each(function (index) {
+            // 원래 상태 복원
+            $(this).attr("type", originalInputs[index].type)
+                .val(originalInputs[index].value)
+                .addClass("btn btn-outline-secondary")
+                .data("category", originalInputs[index].category)
+                .attr("data-bs-toggle", "modal");
+        });
     });
 
     // 적용하기 버튼 클릭 이벤트
@@ -74,11 +104,15 @@ $(document).ready(function() {
                 newSrc = `../assets/images/${randomNumber}.webp`;
             } while (newSrc === currentSrc);
 
+            $(".product-info input").each(function (index) {
+                $(this).attr("type", originalInputs[index].type)
+                    .addClass("btn btn-outline-secondary")
+                    .data("category", originalInputs[index].category)
+                    .attr("data-bs-toggle", "modal");
+            });
+
             // 이미지 태그의 src 속성 업데이트
             $(".generated-image img").attr("src", newSrc);
-
-            // 로딩 모달 숨기기
-            $("#loadingModal").modal("hide");
 
             hideLoading();
         }, 3000); // 3초 후 숨김
