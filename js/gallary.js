@@ -1,3 +1,52 @@
+
+function generate_prompt() {
+    var formData = new FormData();
+
+    // Target Image (굳이 필요 없다면 주석 처리 가능)
+    var targetImage = $(".image-upload-area input")[0].files[0];
+    // Theme Image (분석할 이미지)
+    var themeImage = $(".image-upload-area input")[1].files[0];
+
+    // 파일이 제대로 선택되었는지 확인
+    if (!themeImage) {
+        alert("분석할 이미지(Theme Image)를 업로드해주세요.");
+        return;
+    }
+
+    // FormData에 key/value로 업로드 파일을 담음
+    // FastAPI 함수에서 `image: UploadFile = File(...)`로 받을 것이므로, key 이름을 "image"로 맞춤
+    formData.append("image", themeImage);
+
+    // 로딩 모달 표시 (선택 사항)
+    $("#loadingModal").modal("show");
+
+    $.ajax({
+        url: "http://15.164.103.16:8000/image-to-text", // http:// 중복 제거
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            $("#loadingModal").modal("hide");
+            console.log("API 응답:", response);
+
+            // 서버 응답은 { "caption": "...분석결과..." } 형태라고 가정
+            if (response.caption) {
+                // 예: 캡션 결과를 alert 또는 페이지 내 특정 영역에 표시
+                alert("이미지 분석 결과: " + response.caption);
+                // $(".content").append("<p>" + response.caption + "</p>");
+            } else {
+                alert("분석 결과가 없습니다.");
+            }
+        },
+        error: function (xhr, status, error) {
+            $("#loadingModal").modal("hide");
+            console.error("API 요청 실패:", error);
+            alert("API 요청 중 오류가 발생했습니다.");
+        }
+    });
+}
+
 $(document).ready(function () {
     // Listen for file input changes
     $('input[type="file"]').on('change', function (event) {
@@ -92,6 +141,8 @@ $(document).ready(function () {
             $(".content").css("overflow-y", "auto");
             $(".description-area").css('display', 'flex');
             $('.description-area').addClass('visible');
+
+            generate_prompt();
 
             $('.content').animate({
                 scrollTop: $('.description-area').offset().top
