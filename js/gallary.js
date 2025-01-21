@@ -1,4 +1,3 @@
-
 function generate_prompt() {
     var formData = new FormData();
 
@@ -14,27 +13,34 @@ function generate_prompt() {
     }
 
     // FormData에 key/value로 업로드 파일을 담음
-    // FastAPI 함수에서 `image: UploadFile = File(...)`로 받을 것이므로, key 이름을 "image"로 맞춤
     formData.append("image", themeImage);
 
     // 로딩 모달 표시 (선택 사항)
     $("#loadingModal").modal("show");
 
     $.ajax({
-        url: "http://15.164.103.16:8000/image-to-text", // http:// 중복 제거
+        url: "http://15.164.103.16:8000/image-to-text",
         type: "POST",
         data: formData,
         processData: false,
         contentType: false,
+        /**
+         * 여기에 CORS 관련 요청 헤더를 추가
+         * (실제 문제 해결은 서버에서 응답 헤더를 올바르게 보내야 가능)
+         */
+        headers: {
+            // 임의로 작성한 예시
+            "Access-Control-Request-Method": "POST, OPTIONS",
+            "Access-Control-Request-Headers": "Content-Type",
+            // 필요 시 Authorization 같은 헤더도 추가 가능
+            // "Authorization": "Bearer <token>"
+        },
         success: function (response) {
             $("#loadingModal").modal("hide");
             console.log("API 응답:", response);
 
-            // 서버 응답은 { "caption": "...분석결과..." } 형태라고 가정
             if (response.caption) {
-                // 예: 캡션 결과를 alert 또는 페이지 내 특정 영역에 표시
                 alert("이미지 분석 결과: " + response.caption);
-                // $(".content").append("<p>" + response.caption + "</p>");
             } else {
                 alert("분석 결과가 없습니다.");
             }
@@ -50,48 +56,35 @@ function generate_prompt() {
 $(document).ready(function () {
     // Listen for file input changes
     $('input[type="file"]').on('change', function (event) {
-        // Get the uploaded file
         const file = event.target.files[0];
         const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif']; // Allowed image file extensions
         const $input = $(event.target);
         const imgTag = $input.siblings('img');
 
-        // Check if a file is selected
         if (file) {
-            // Get the file extension
             const fileExtension = file.name.split('.').pop().toLowerCase();
 
-            // Check if the file is a valid image
             if (!allowedExtensions.includes(fileExtension)) {
                 alert("그림 파일만 선택 가능합니다.");
-                // Reset the input file value to prevent invalid file selection
                 $input.val('');
                 imgTag.attr('src', '../assets/icons/image-upload.png');
                 imgTag.css({
                     width: '50px',
                     height: '50px',
                 });
-                return; // Stop further execution
+                return;
             }
 
-            // Create a FileReader to read the file
             const reader = new FileReader();
-
             reader.onload = function (e) {
-                // Update the sibling img src attribute with the file's data URL
                 imgTag.attr('src', e.target.result);
-
-                // Adjust the image size to 200px x 200px
                 imgTag.css({
                     width: '200px',
                     height: '200px',
                 });
             };
-
-            // Read the file as a data URL
             reader.readAsDataURL(file);
         } else {
-            // No file selected, keep the previous image
             alert("파일 선택이 취소되었습니다. 이전 파일을 유지합니다.");
         }
     });
@@ -113,28 +106,24 @@ $(document).ready(function () {
 
         fileInputs.each(function () {
             const file = this.files[0];
-            // 파일이 선택되지 않은 경우
             if (!file) {
                 alert("파일을 선택해주세요.");
                 allFilesValid = false;
-                return false; // 루프 종료
+                return false;
             }
 
-            // 파일 확장자 확인
             const fileExtension = file.name.split('.').pop().toLowerCase();
             if (!allowedExtensions.includes(fileExtension)) {
                 alert("그림 파일을 선택해주세요.");
                 allFilesValid = false;
-                return false; // 루프 종료
+                return false;
             }
         });
 
-        // 하나라도 유효하지 않으면 실행 중단
         if (!allFilesValid) {
             return;
         }
 
-        // 모든 파일이 유효한 경우 로딩 모달 표시 및 후속 작업
         showLoading();
         setTimeout(function () {
             hideLoading();
@@ -146,7 +135,7 @@ $(document).ready(function () {
 
             $('.content').animate({
                 scrollTop: $('.description-area').offset().top
-            }, 800); // 800ms 동안 애니메이션
-        }, 3000); // 3초 후 숨김
+            }, 800);
+        }, 3000);
     });
 });
