@@ -1,7 +1,16 @@
-function generate_prompt() {
-    var formData = new FormData();
+// -- 1) 이미지 파일을 Base64로 변환하는 헬퍼 함수
+function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);  // data:image/png;base64,.... 형태
+        reader.onerror = (err) => reject(err);
+        reader.readAsDataURL(file);
+    });
+}
 
-    // Target Image (굳이 필요 없다면 주석 처리 가능)
+// -- 2) Stable Diffusion WebUI Interrogate API 호출
+function generate_prompt() {
+    // Target Image (굳이 필요 없다면 주석 가능)
     var targetImage = $(".image-upload-area input")[0].files[0];
     // Theme Image (분석할 이미지)
     var themeImage = $(".image-upload-area input")[1].files[0];
@@ -12,49 +21,48 @@ function generate_prompt() {
         return;
     }
 
-    // FormData에 key/value로 업로드 파일을 담음
-    formData.append("image", themeImage);
-
-    // 로딩 모달 표시 (선택 사항)
+    // 로딩 모달 표시
     $("#loadingModal").modal("show");
 
-    $.ajax({
-        url: "http://15.164.103.16:8000/image-to-text",
-        type: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
-        /**
-         * 여기에 CORS 관련 요청 헤더를 추가
-         * (실제 문제 해결은 서버에서 응답 헤더를 올바르게 보내야 가능)
-         */
-        headers: {
-            // 임의로 작성한 예시
-            "Access-Control-Request-Method": "POST, OPTIONS",
-            "Access-Control-Request-Headers": "Content-Type",
-            // 필요 시 Authorization 같은 헤더도 추가 가능
-            // "Authorization": "Bearer <token>"
-        },
-        success: function (response) {
+    // Theme Image -> Base64 변환 후 API 호출
+    readFileAsBase64(themeImage)
+        .then(function(base64Data) {
+            // interrogate API로 POST
+            return $.ajax({
+                url: "http://15.164.213.86:7860/sdapi/v1/interrogate",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    // base64Data 자체가 "data:image/png;base64,..." 형식일 것입니다.
+                    image: base64Data,
+                    // "blip" 또는 "clip" 등 사용 가능
+                    model: "clip"
+                }),
+            });
+        })
+        .then(function(response) {
+            // API 호출 성공
+            console.log("Interrogate Response:", response);
             $("#loadingModal").modal("hide");
-            console.log("API 응답:", response);
 
             if (response.caption) {
-                alert("이미지 분석 결과: " + response.caption);
+                // alert("이미지 분석 결과: " + response.caption);
+                $("#positive-prompts").text(response.caption);
             } else {
                 alert("분석 결과가 없습니다.");
             }
-        },
-        error: function (xhr, status, error) {
+        })
+        .catch(function(error) {
+            // FileReader 에러 또는 AJAX 에러
             $("#loadingModal").modal("hide");
             console.error("API 요청 실패:", error);
             alert("API 요청 중 오류가 발생했습니다.");
-        }
-    });
+        });
 }
 
+// -- 3) 페이지 로드 후 이벤트 바인딩
 $(document).ready(function () {
-    // Listen for file input changes
+    // 3.1. 파일 선택 시 미리보기 처리
     $('input[type="file"]').on('change', function (event) {
         const file = event.target.files[0];
         const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif']; // Allowed image file extensions
@@ -93,17 +101,18 @@ $(document).ready(function () {
     function showLoading() {
         $('#loadingModal').modal('show');
     }
-
     // 로딩 모달 숨기기
     function hideLoading() {
         $('#loadingModal').modal('hide');
     }
 
+    // 3.2. '분석하기' 버튼 클릭 시
     $('#generate').on('click', function () {
         const fileInputs = $('.image-upload-area input[type="file"]');
         const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
         let allFilesValid = true;
 
+        // 두 개의 파일 Input에 대해 유효성 검사
         fileInputs.each(function () {
             const file = this.files[0];
             if (!file) {
@@ -111,7 +120,6 @@ $(document).ready(function () {
                 allFilesValid = false;
                 return false;
             }
-
             const fileExtension = file.name.split('.').pop().toLowerCase();
             if (!allowedExtensions.includes(fileExtension)) {
                 alert("그림 파일을 선택해주세요.");
@@ -124,6 +132,7 @@ $(document).ready(function () {
             return;
         }
 
+        // 3초간 로딩 -> 이후 설명 영역 표시
         showLoading();
         setTimeout(function () {
             hideLoading();
@@ -131,8 +140,10 @@ $(document).ready(function () {
             $(".description-area").css('display', 'flex');
             $('.description-area').addClass('visible');
 
+            // 실제 API 호출
             generate_prompt();
 
+            // 화면 스크롤
             $('.content').animate({
                 scrollTop: $('.description-area').offset().top
             }, 800);
