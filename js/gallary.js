@@ -155,7 +155,7 @@ $("#next").click(function() {
     
     // 사용자가 선택한 구성 유지 강도 (denoising_strength)
     // 슬라이더 값은 0 ~ 1 사이로 선택되며, 낮은 값일수록 원본 구성 유지 효과가 큽니다.
-    const denoisingStrength = 0.8;
+    const denoisingStrength = 0.6;
     
     // 프롬프트에 보강 문구 추가 (원한다면 사용자가 입력한 프롬프트에 덧붙이기)
     const userPrompt = $("#positive-prompts").val() || "";
