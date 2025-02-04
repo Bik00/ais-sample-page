@@ -143,55 +143,72 @@ $(document).ready(function () {
     });
 
     // next 클릭
+    // Next 버튼 클릭 이벤트 (개선된 img2img 호출)
     $("#next").click(function() {
-        // 1. 로딩 모달 표시 등 필요한 UI 처리
+        // 타겟 이미지 선택 여부 확인 (첫 번째 파일 인풋)
+        const targetFile = $(".image-upload-area input")[0].files[0];
+        if (!targetFile) {
+            alert("타겟 이미지를 업로드해주세요.");
+            return;
+        }
+        
+        // 로딩 모달 표시
         $("#loadingModal").modal("show");
-    
-        // 2. prompt, negative prompt 가져오기(예시)
-        const payload = {
-            prompt: $("#positive-prompts").val() || "",
-            negative_prompt: $("#negative-prompts").val() || "",
-            steps: 20,
-            width: 512,
-            height: 512,
-            sampler_index: "Euler",
-            // 모델 변경 시:
-            override_settings: {
-              sd_model_checkpoint: "myModel.safetensors"
-            },
-            override_settings_restore_afterwards: true
-        };
-    
-        // 3. txt2img API 호출
-        $.ajax({
-            url: "http://3.36.64.39:7860/sdapi/v1/txt2img",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(payload),
-            success: function(response) {
-                console.log("Generation success:", response);
-    
-                // 3-1. 로딩 모달 닫기
+        
+        // target image를 Base64로 변환
+        readFileAsBase64(targetFile)
+            .then(function(base64TargetImage) {
+                // payload에 target image(Base64)를 init_images로 추가하고 prompt 정보를 포함합니다.
+                const payload = {
+                    // img2img는 초기 이미지 리스트를 받으므로 배열 형태로 전달합니다.
+                    init_images: [base64TargetImage],
+                    prompt: $("#positive-prompts").val() || "",
+                    negative_prompt: $("#negative-prompts").val() || "",
+                    steps: 20,
+                    width: 512,
+                    height: 512,
+                    sampler_index: "Euler",
+                    // 초기 이미지와 프롬프트의 결합 강도 (0.0 ~ 1.0)
+                    denoising_strength: 0.6,
+                    // 필요한 경우 모델 체크포인트 변경
+                    override_settings: {
+                        sd_model_checkpoint: "myModel.safetensors"
+                    },
+                    override_settings_restore_afterwards: true
+                };
+
+                // img2img API 호출
+                $.ajax({
+                    url: "http://3.36.64.39:7860/sdapi/v1/img2img", // txt2img 대신 img2img 엔드포인트 사용
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(payload),
+                    success: function(response) {
+                        console.log("Generation success:", response);
+                        $("#loadingModal").modal("hide");
+
+                        if (response.images && response.images.length > 0) {
+                            const base64Image = response.images[0];
+                            // 생성된 이미지 Base64를 LocalStorage에 저장
+                            localStorage.setItem("generatedImage", base64Image);
+                            // 결과 페이지로 이동
+                            location.href = "./result.html";
+                        } else {
+                            alert("이미지를 생성하지 못했습니다.");
+                        }
+                    },
+                    error: function(err) {
+                        $("#loadingModal").modal("hide");
+                        console.error("Generation error:", err);
+                        alert("이미지 생성 중 오류가 발생했습니다.");
+                    }
+                });
+            })
+            .catch(function(error) {
                 $("#loadingModal").modal("hide");
-    
-                // 3-2. 응답에서 Base64 이미지 추출
-                if (response.images && response.images.length > 0) {
-                    const base64Image = response.images[0];
-    
-                    // 3-3. LocalStorage에 저장
-                    localStorage.setItem("generatedImage", base64Image);
-    
-                    // 3-4. result.html로 이동
-                    location.href = "./result.html";
-                } else {
-                    alert("이미지를 생성하지 못했습니다.");
-                }
-            },
-            error: function(err) {
-                $("#loadingModal").modal("hide");
-                console.error("Generation error:", err);
-                alert("이미지 생성 중 오류가 발생했습니다.");
-            }
-        });
+                console.error("타겟 이미지 Base64 변환 실패:", error);
+                alert("타겟 이미지 변환에 실패했습니다.");
+            });
     });
+
 });
