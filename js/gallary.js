@@ -144,71 +144,80 @@ $(document).ready(function () {
 
     // next 클릭
     // Next 버튼 클릭 이벤트 (개선된 img2img 호출)
-    $("#next").click(function() {
-        // 타겟 이미지 선택 여부 확인 (첫 번째 파일 인풋)
-        const targetFile = $(".image-upload-area input")[0].files[0];
-        if (!targetFile) {
-            alert("타겟 이미지를 업로드해주세요.");
-            return;
-        }
-        
-        // 로딩 모달 표시
-        $("#loadingModal").modal("show");
-        
-        // target image를 Base64로 변환
-        readFileAsBase64(targetFile)
-            .then(function(base64TargetImage) {
-                // payload에 target image(Base64)를 init_images로 추가하고 prompt 정보를 포함합니다.
-                const payload = {
-                    // img2img는 초기 이미지 리스트를 받으므로 배열 형태로 전달합니다.
-                    init_images: [base64TargetImage],
-                    prompt: $("#positive-prompts").val() || "",
-                    negative_prompt: $("#negative-prompts").val() || "",
-                    steps: 20,
-                    width: 512,
-                    height: 512,
-                    sampler_index: "Euler",
-                    // 초기 이미지와 프롬프트의 결합 강도 (0.0 ~ 1.0)
-                    denoising_strength: 0.6,
-                    // 필요한 경우 모델 체크포인트 변경
-                    override_settings: {
-                        sd_model_checkpoint: "myModel.safetensors"
-                    },
-                    override_settings_restore_afterwards: true
-                };
+// Next 버튼 클릭 이벤트 (img2img 호출, 구성 보존 옵션 추가)
+$("#next").click(function() {
+    // 타겟 이미지 선택 여부 확인 (첫 번째 파일 인풋)
+    const targetFile = $(".image-upload-area input")[0].files[0];
+    if (!targetFile) {
+        alert("타겟 이미지를 업로드해주세요.");
+        return;
+    }
+    
+    // 사용자가 선택한 구성 유지 강도 (denoising_strength)
+    // 슬라이더 값은 0 ~ 1 사이로 선택되며, 낮은 값일수록 원본 구성 유지 효과가 큽니다.
+    const denoisingStrength = 0.3;
+    
+    // 프롬프트에 보강 문구 추가 (원한다면 사용자가 입력한 프롬프트에 덧붙이기)
+    const userPrompt = $("#positive-prompts").val() || "";
+    const additionalInstruction = " 단, 타겟 이미지의 구성은 그대로 유지하되, 분위기, 인테리어, 질감, 벽지 등만 변경.";
+    const finalPrompt = userPrompt + additionalInstruction;
+    
+    // 로딩 모달 표시
+    $("#loadingModal").modal("show");
+    
+    // 타겟 이미지 Base64 변환
+    readFileAsBase64(targetFile)
+        .then(function(base64TargetImage) {
+            // img2img API에 전달할 payload 구성
+            const payload = {
+                init_images: [base64TargetImage],
+                prompt: finalPrompt,
+                negative_prompt: $("#negative-prompts").val() || "",
+                steps: 20,
+                width: 512,
+                height: 512,
+                sampler_index: "Euler",
+                // 사용자가 선택한 값 적용 (낮은 값: 원본 구성 보존)
+                denoising_strength: denoisingStrength,
+                // 모델 체크포인트 등 추가 옵션 (필요시 수정)
+                override_settings: {
+                    sd_model_checkpoint: "myModel.safetensors"
+                },
+                override_settings_restore_afterwards: true
+            };
 
-                // img2img API 호출
-                $.ajax({
-                    url: "http://3.36.64.39:7860/sdapi/v1/img2img", // txt2img 대신 img2img 엔드포인트 사용
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify(payload),
-                    success: function(response) {
-                        console.log("Generation success:", response);
-                        $("#loadingModal").modal("hide");
+            // img2img API 호출
+            $.ajax({
+                url: "http://3.36.64.39:7860/sdapi/v1/img2img",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(payload),
+                success: function(response) {
+                    console.log("Generation success:", response);
+                    $("#loadingModal").modal("hide");
 
-                        if (response.images && response.images.length > 0) {
-                            const base64Image = response.images[0];
-                            // 생성된 이미지 Base64를 LocalStorage에 저장
-                            localStorage.setItem("generatedImage", base64Image);
-                            // 결과 페이지로 이동
-                            location.href = "./result.html";
-                        } else {
-                            alert("이미지를 생성하지 못했습니다.");
-                        }
-                    },
-                    error: function(err) {
-                        $("#loadingModal").modal("hide");
-                        console.error("Generation error:", err);
-                        alert("이미지 생성 중 오류가 발생했습니다.");
+                    if (response.images && response.images.length > 0) {
+                        const base64Image = response.images[0];
+                        // 생성된 이미지 Base64를 LocalStorage에 저장
+                        localStorage.setItem("generatedImage", base64Image);
+                        // 결과 페이지로 이동
+                        location.href = "./result.html";
+                    } else {
+                        alert("이미지를 생성하지 못했습니다.");
                     }
-                });
-            })
-            .catch(function(error) {
-                $("#loadingModal").modal("hide");
-                console.error("타겟 이미지 Base64 변환 실패:", error);
-                alert("타겟 이미지 변환에 실패했습니다.");
+                },
+                error: function(err) {
+                    $("#loadingModal").modal("hide");
+                    console.error("Generation error:", err);
+                    alert("이미지 생성 중 오류가 발생했습니다.");
+                }
             });
-    });
+        })
+        .catch(function(error) {
+            $("#loadingModal").modal("hide");
+            console.error("타겟 이미지 Base64 변환 실패:", error);
+            alert("타겟 이미지 변환에 실패했습니다.");
+        });
+});
 
 });
