@@ -29,7 +29,7 @@ function generate_prompt() {
         .then(function(base64Data) {
             // interrogate API로 POST
             return $.ajax({
-                url: "http://15.164.213.86:7860/sdapi/v1/interrogate",
+                url: "http://3.36.64.39:7860/sdapi/v1/interrogate",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -164,7 +164,7 @@ $(document).ready(function () {
     
         // 3. txt2img API 호출
         $.ajax({
-            url: "http://15.164.213.86:7860/sdapi/v1/txt2img",
+            url: "http://3.36.64.39:7860/sdapi/v1/txt2img",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify(payload),
