@@ -144,80 +144,82 @@ $(document).ready(function () {
 
     // next 클릭
     // Next 버튼 클릭 이벤트 (개선된 img2img 호출)
-// Next 버튼 클릭 이벤트 (img2img 호출, 구성 보존 옵션 추가)
-$("#next").click(function() {
-    // 타겟 이미지 선택 여부 확인 (첫 번째 파일 인풋)
-    const targetFile = $(".image-upload-area input")[0].files[0];
-    if (!targetFile) {
-        alert("타겟 이미지를 업로드해주세요.");
-        return;
-    }
-    
-    // 사용자가 선택한 구성 유지 강도 (denoising_strength)
-    // 슬라이더 값은 0 ~ 1 사이로 선택되며, 낮은 값일수록 원본 구성 유지 효과가 큽니다.
-    const denoisingStrength = 0.6;
-    
-    // 프롬프트에 보강 문구 추가 (원한다면 사용자가 입력한 프롬프트에 덧붙이기)
-    const userPrompt = $("#positive-prompts").val() || "";
-    const additionalInstruction = " 단, 타겟 이미지의 구성은 그대로 유지하되, 분위기, 인테리어, 질감, 벽지 등만 변경.";
-    const finalPrompt = userPrompt + additionalInstruction;
-    
-    // 로딩 모달 표시
-    $("#loadingModal").modal("show");
-    
-    // 타겟 이미지 Base64 변환
-    readFileAsBase64(targetFile)
-        .then(function(base64TargetImage) {
-            // img2img API에 전달할 payload 구성
-            const payload = {
-                init_images: [base64TargetImage],
-                prompt: finalPrompt,
-                negative_prompt: $("#negative-prompts").val() || "",
-                steps: 20,
-                width: 512,
-                height: 512,
-                sampler_index: "Euler",
-                // 사용자가 선택한 값 적용 (낮은 값: 원본 구성 보존)
-                denoising_strength: denoisingStrength,
-                // 모델 체크포인트 등 추가 옵션 (필요시 수정)
-                override_settings: {
-                    sd_model_checkpoint: "myModel.safetensors"
-                },
-                override_settings_restore_afterwards: true
-            };
+    // Next 버튼 클릭 이벤트 (img2img 호출, 구성 보존 옵션 추가)
+    // Next 버튼 클릭 이벤트 (구성은 유지, 스타일은 테마 프롬프트 적용)
+    $("#next").click(function() {
+        // 타겟 이미지 선택 여부 확인 (첫 번째 파일 인풋)
+        const targetFile = $(".image-upload-area input")[0].files[0];
+        if (!targetFile) {
+            alert("타겟 이미지를 업로드해주세요.");
+            return;
+        }
+        
+        // 사용자가 선택한 스타일 변경 강도 (denoising_strength)
+        // 이 값이 높을수록 프롬프트에 따른 스타일 및 세부 요소의 변화가 강해집니다.
+        const styleStrength = 0.6;
+        
+        // 사용자가 입력한 프롬프트와 함께, 반드시 구도와 배치는 유지한다는 보강 문구 추가
+        const userPrompt = $("#positive-prompts").val() || "";
+        const preservationInstruction = " 반드시 사진 속 구도와 배치는 그대로 유지하면서, 나머지 분위기, 인테리어, 질감, 벽지 등의 스타일과 세부 요소는 아래 프롬프트 내용에 따라 변경.";
+        const finalPrompt = userPrompt + preservationInstruction;
+        
+        // 로딩 모달 표시
+        $("#loadingModal").modal("show");
+        
+        // 타겟 이미지 Base64 변환
+        readFileAsBase64(targetFile)
+            .then(function(base64TargetImage) {
+                // img2img API에 전달할 payload 구성
+                const payload = {
+                    init_images: [base64TargetImage],
+                    prompt: finalPrompt,
+                    negative_prompt: $("#negative-prompts").val() || "",
+                    steps: 20,
+                    width: 512,
+                    height: 512,
+                    sampler_index: "Euler",
+                    // 스타일 변경 강도(denoising_strength)를 사용 (예: 0.6이면 스타일만 크게 변경)
+                    denoising_strength: styleStrength,
+                    // 프롬프트(특히 구성 보존)를 더 강하게 반영하고 싶다면 cfg_scale 값을 높일 수 있습니다.
+                    cfg_scale: 8,
+                    override_settings: {
+                        sd_model_checkpoint: "myModel.safetensors"
+                    },
+                    override_settings_restore_afterwards: true
+                };
 
-            // img2img API 호출
-            $.ajax({
-                url: "http://3.36.64.39:7860/sdapi/v1/img2img",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(payload),
-                success: function(response) {
-                    console.log("Generation success:", response);
-                    $("#loadingModal").modal("hide");
+                // img2img API 호출
+                $.ajax({
+                    url: "http://3.36.64.39:7860/sdapi/v1/img2img",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(payload),
+                    success: function(response) {
+                        console.log("Generation success:", response);
+                        $("#loadingModal").modal("hide");
 
-                    if (response.images && response.images.length > 0) {
-                        const base64Image = response.images[0];
-                        // 생성된 이미지 Base64를 LocalStorage에 저장
-                        localStorage.setItem("generatedImage", base64Image);
-                        // 결과 페이지로 이동
-                        location.href = "./result.html";
-                    } else {
-                        alert("이미지를 생성하지 못했습니다.");
+                        if (response.images && response.images.length > 0) {
+                            const base64Image = response.images[0];
+                            // 생성된 이미지 Base64를 LocalStorage에 저장
+                            localStorage.setItem("generatedImage", base64Image);
+                            // 결과 페이지로 이동
+                            location.href = "./result.html";
+                        } else {
+                            alert("이미지를 생성하지 못했습니다.");
+                        }
+                    },
+                    error: function(err) {
+                        $("#loadingModal").modal("hide");
+                        console.error("Generation error:", err);
+                        alert("이미지 생성 중 오류가 발생했습니다.");
                     }
-                },
-                error: function(err) {
-                    $("#loadingModal").modal("hide");
-                    console.error("Generation error:", err);
-                    alert("이미지 생성 중 오류가 발생했습니다.");
-                }
+                });
+            })
+            .catch(function(error) {
+                $("#loadingModal").modal("hide");
+                console.error("타겟 이미지 Base64 변환 실패:", error);
+                alert("타겟 이미지 변환에 실패했습니다.");
             });
-        })
-        .catch(function(error) {
-            $("#loadingModal").modal("hide");
-            console.error("타겟 이미지 Base64 변환 실패:", error);
-            alert("타겟 이미지 변환에 실패했습니다.");
-        });
-});
+    });
 
 });
