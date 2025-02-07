@@ -29,7 +29,7 @@ function generate_prompt() {
         .then(function(base64Data) {
             // interrogate API로 POST
             return $.ajax({
-                url: "http://3.36.64.39:7860/sdapi/v1/interrogate",
+                url: "http://54.180.152.76:7860/sdapi/v1/interrogate",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -51,6 +51,7 @@ function generate_prompt() {
             $(".content").css("overflow-y", "auto");
             $(".description-area").css('display', 'flex');
             $('.description-area').addClass('visible');
+            $('.button-area').css('display', 'block');
 
             // 화면 스크롤
             $('.content').animate({
@@ -153,19 +154,19 @@ $(document).ready(function () {
             alert("타겟 이미지를 업로드해주세요.");
             return;
         }
-        
+
         // 사용자가 선택한 스타일 변경 강도 (denoising_strength)
         // 이 값이 높을수록 프롬프트에 따른 스타일 및 세부 요소의 변화가 강해집니다.
         const styleStrength = 0.6;
-        
+
         // 사용자가 입력한 프롬프트와 함께, 반드시 구도와 배치는 유지한다는 보강 문구 추가
         const userPrompt = $("#positive-prompts").val() || "";
         const preservationInstruction = " 반드시 사진 속 구도와 배치는 그대로 유지하면서, 나머지 분위기, 인테리어, 질감, 벽지 등의 스타일과 세부 요소는 아래 프롬프트 내용에 따라 변경.";
         const finalPrompt = userPrompt + preservationInstruction;
-        
+
         // 로딩 모달 표시
         $("#loadingModal").modal("show");
-        
+
         // 타겟 이미지 Base64 변환
         readFileAsBase64(targetFile)
             .then(function(base64TargetImage) {
@@ -190,7 +191,7 @@ $(document).ready(function () {
 
                 // img2img API 호출
                 $.ajax({
-                    url: "http://3.36.64.39:7860/sdapi/v1/img2img",
+                    url: "http://54.180.152.76:7860/sdapi/v1/img2img",
                     type: "POST",
                     contentType: "application/json",
                     data: JSON.stringify(payload),

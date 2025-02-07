@@ -74,3 +74,7 @@ footer {
 textarea.form-control {
     resize: none; /* 텍스트박스 크기 조절 비활성화 */
 }
+
+.button-area {
+    display: none !important;
+}
