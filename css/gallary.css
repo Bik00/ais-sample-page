@@ -76,5 +76,5 @@ textarea.form-control {
 }
 
 .button-area {
-    display: none !important;
+    opacity: 0;
 }

@@ -51,7 +51,7 @@ function generate_prompt() {
             $(".content").css("overflow-y", "auto");
             $(".description-area").css('display', 'flex');
             $('.description-area').addClass('visible');
-            $('.button-area').css('display', 'block');
+            $('.button-area').css('opacity', '1');
 
             // 화면 스크롤
             $('.content').animate({
