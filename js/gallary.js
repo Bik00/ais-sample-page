@@ -29,7 +29,7 @@ function generate_prompt() {
         .then(function(base64Data) {
             // interrogate API로 POST
             return $.ajax({
-                url: "http://13.209.66.52:7860/sdapi/v1/interrogate",
+                url: "http://13.125.152.137:7860/sdapi/v1/interrogate",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -191,19 +191,17 @@ $(document).ready(function () {
 
                 // img2img API 호출
                 $.ajax({
-                    url: "http://13.209.66.52:7860/sdapi/v1/img2img",
+                    url: "http://13.125.224.96:5000/generate",
                     type: "POST",
                     contentType: "application/json",
                     data: JSON.stringify(payload),
                     success: function(response) {
                         console.log("Generation success:", response);
                         $("#loadingModal").modal("hide");
-
+                
                         if (response.images && response.images.length > 0) {
                             const base64Image = response.images[0];
-                            // 생성된 이미지 Base64를 LocalStorage에 저장
                             localStorage.setItem("generatedImage", base64Image);
-                            // 결과 페이지로 이동
                             location.href = "./result.html";
                         } else {
                             alert("이미지를 생성하지 못했습니다.");
@@ -215,6 +213,7 @@ $(document).ready(function () {
                         alert("이미지 생성 중 오류가 발생했습니다.");
                     }
                 });
+                
             })
             .catch(function(error) {
                 $("#loadingModal").modal("hide");
