@@ -203,6 +203,8 @@ $(document).ready(function () {
                             const base64Image = response.images[0];
                             localStorage.setItem("generatedImage", base64Image);
                             location.href = "./result.html";
+                        } else if(response.error){
+                            alert("이미지 생성 중 오류가 발생했습니다: " + response.error);
                         } else {
                             alert("이미지를 생성하지 못했습니다.");
                         }
