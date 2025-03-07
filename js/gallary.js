@@ -29,7 +29,7 @@ function generate_prompt() {
         .then(function(base64Data) {
             // interrogate API로 POST
             return $.ajax({
-                url: "http://13.125.152.137:7860/sdapi/v1/interrogate",
+                url: "http://54.180.123.29:7860/sdapi/v1/interrogate",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -191,14 +191,14 @@ $(document).ready(function () {
 
                 // img2img API 호출
                 $.ajax({
-                    url: "http://13.125.224.96:5000/generate",
+                    url: "http://52.79.106.94:5000/generate",
                     type: "POST",
                     contentType: "application/json",
                     data: JSON.stringify(payload),
                     success: function(response) {
                         console.log("Generation success:", response);
                         $("#loadingModal").modal("hide");
-                
+
                         if (response.images && response.images.length > 0) {
                             const base64Image = response.images[0];
                             localStorage.setItem("generatedImage", base64Image);
