@@ -6,7 +6,7 @@ $(document).ready(function() {
     const base64Data = localStorage.getItem("generatedImage");
     if (base64Data) {
       // 2. <img> 태그에 설정
-      $("#result-image").attr("src", "data:image/png;base64," + base64Data);
+      $("#result-image").attr("src", base64Data);
     } else {
       // 저장된 이미지가 없다면?
       alert("생성된 이미지가 없습니다.");
