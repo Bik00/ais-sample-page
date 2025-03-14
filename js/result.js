@@ -15,14 +15,32 @@ $(document).ready(function() {
     $(document).on("click", "input[type='button']", function () {
         const value = $(this).val();
         $("#productModalLabel").text("선택된 항목");
-        $("#modal-explain-area").text(`현재 선택된 항목은 "${value}"입니다.`);
+        var output_body_text;
+        var output_body_link;
+        
+        if (value == '벽지') {
+            output_body_text = "제품 명 : 룸스토어 만능풀바른벽지 RS525055-3 실크벽지";
+            output_body_link = "https://smartstore.naver.com/roomstore/products/3804207079?NaPm=ct%3Dm885dlqw%7Cci%3D6c3695c053245469dbcccd3cbb0dca15c618329a%7Ctr%3Dslsl%7Csn%3D402955%7Chk%3D1a727c8a78acfeff769911716eb3a0e4a930e4ed&nl-au=9acf9bba06b94368888cc72958ad26c7&nl-query=네이버+스토어+벽지";
+        } else if (value == '책상') {
+            output_body_text = "제품 명 : 조립식 노트북 공부 컴퓨터 긴 원룸 전면 나무 좁은 방 원목 긴 거실 우드 책상 테이블";
+            output_body_link = "https://smartstore.naver.com/gowoostore/products/8233142118?NaPm=ct%3Dm888g6gg%7Cci%3D85ceeb91392a9ea93038fbcb8b0706b46b4d22be%7Ctr%3Dslsl%7Csn%3D1073441%7Chk%3D32dbf75b0573a44ee72a862b15c3339783d14191&nl-au=2f0e3cbe5a6d469c903bd73b692abf04&nl-query=네이버+스토어+책상";
+        } else if (value == '스탠드') {
+            output_body_text = "제품 명 : LED 달리아 집게형 클립형 무선 단 스탠드 조명 5W USB충전형 디밍 침대 독서등";
+            output_body_link = "https://smartstore.naver.com/busanled/products/9248723136?NaPm=ct%3Dm888qeig%7Cci%3Ddbca4e98a19eadbc1aa07bf03e06098ed0387c1c%7Ctr%3Dslsl%7Csn%3D457130%7Chk%3Df4399f5fd6bc2394942f41c58c3a44f742d6302b&nl-au=2d322ede47304ebb9b1d923a79790197&nl-query=네이버+스토어+스탠드";
+        } else if (value == '오브제') {
+            output_body_text = "제품 명 : 유럽식 벽난로 카페 펜션 인테리어 모형장식 장식장";
+            output_body_link = "https://smartstore.naver.com/seongseo/products/8982899251?NaPm=ct%3Dm8891ecg%7Cci%3Dc6592fe2b74fdc0147631a59ae1222341a1ff118%7Ctr%3Dslsl%7Csn%3D8378484%7Chk%3De93b896cb55464e70ad33bd05a0e2c9a0a67f5fa&nl-query=네이버+스토어+인테리어+장식";
+        }
+        
+        $("#modal-explain-area").text(output_body_text);
+        $("#modal-link-area").html('<a href="' + output_body_link + '">바로 가기</a>');
 
         // data-category 속성 값 읽기
         const category = $(this).data("category");
 
         // 슬라이드쇼 이미지 업데이트
         $(".mySlides img").each(function (index) {
-            const newSrc = `../assets/images/${category}_${index + 1}.webp`;
+            const newSrc = `../assets/images/${category}_${index + 1}.png`;
             $(this).attr("src", newSrc);
             $(this).css({
                 "object-fit": "cover",
@@ -33,7 +51,7 @@ $(document).ready(function() {
         // 썸네일 이미지 업데이트
         $(".slideshow-row .slideshow-column img").each(function (index) {
             let caption_text = `${value} ${index + 1}번 사진`;
-            const newSrc = `../assets/images/${category}_${index + 1}.webp`;
+            const newSrc = `../assets/images/${category}_${index + 1}.png`;
             $(this).attr("src", newSrc).attr("alt", caption_text);
         });
 
